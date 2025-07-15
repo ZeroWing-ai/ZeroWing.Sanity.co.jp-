@@ -11,6 +11,30 @@ export const categoriesQuery = groq`
   }
 `;
 
+export const popularPostsQuery = groq`
+  *[_type == "post" && !(_id in path("drafts.**"))] | order(viewCount desc) [0..4] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage,
+    publishedAt,
+    categories[]->{
+      _id,
+      title,
+      slug,
+      color
+    },
+    tags,
+    author->{
+      name,
+      slug,
+      image
+    },
+    "viewCount": coalesce(viewCount, 0)
+  }
+`;
+
 export const allPostsQuery = groq`
   *[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
     _id,

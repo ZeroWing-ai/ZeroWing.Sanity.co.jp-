@@ -3,35 +3,20 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { getAllCategories } from '@/sanity/lib/api';
+import { Category } from '@/types/post';
 import CategoryBadge from './CategoryBadge';
 
-interface Category {
-  _id: string;
-  title: string;
-  slug: string;
-  color: string;
+interface CategoryWithCount extends Category {
   postCount: number;
 }
 
-export default function CategoriesList({ className = '' }: { className?: string }) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+interface CategoriesListProps {
+  categories: CategoryWithCount[];
+  className?: string;
+}
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categoriesData = await getAllCategories();
-        setCategories(categoriesData);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+export default function CategoriesList({ categories, className = '' }: CategoriesListProps) {
+  if (!categories || categories.length === 0) return null;
 
   if (isLoading) {
     return (

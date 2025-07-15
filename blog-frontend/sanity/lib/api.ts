@@ -6,6 +6,7 @@ import {
   postsByCategoryQuery,
   postsByTagQuery,
   allTagsQuery,
+  popularPostsQuery,
 } from './queries';
 
 export async function getAllPosts() {
@@ -46,4 +47,8 @@ export async function getRelatedPosts(categoryIds: string[], currentPostId: stri
     }`,
     { categoryIds, currentPostId }
   );
+}
+
+export async function getPopularPosts() {
+  return await client.fetch(popularPostsQuery);
 }

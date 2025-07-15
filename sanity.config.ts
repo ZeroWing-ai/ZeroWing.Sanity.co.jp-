@@ -3,6 +3,7 @@ import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import {previewDocumentNode} from './plugins/preview/PreviewAction'
+import {PopularPostsWidget} from './widgets/PopularPostsWidget'
 
 export default defineConfig({
   name: 'default',
@@ -18,6 +19,10 @@ export default defineConfig({
     }),
     visionTool({
       title: 'クエリエクスプローラー',
+    }),
+    PopularPostsWidget({
+      title: '人気記事ランキング',
+      width: 'medium'
     }),
   ],
 
