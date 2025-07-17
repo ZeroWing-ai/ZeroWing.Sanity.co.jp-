@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
-import { getAllPosts, getAllCategories, getPopularPosts } from '@/sanity/lib/api';
+import { Suspense } from 'react';
+import { getAllPosts, getAllCategories } from '@/sanity/lib/api';
 import BlogPostList from '@/components/BlogPostList';
 import CategoriesList from '@/components/CategoriesList';
 import TagCloud from '@/components/TagCloud';
-import PopularPosts from '@/components/PopularPosts';
+import PopularPosts, { LoadingSkeleton as PopularPostsSkeleton } from '@/components/popular-posts';
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
@@ -13,10 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-  const [posts, categories, popularPosts] = await Promise.all([
+  const [posts, categories] = await Promise.all([
     getAllPosts(),
     getAllCategories(),
-    getPopularPosts(),
   ]);
 
   return (
@@ -36,7 +36,9 @@ export default async function BlogPage() {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
             <TagCloud />
           </div>
-          <PopularPosts posts={popularPosts} />
+          <Suspense fallback={<PopularPostsSkeleton />}>
+            <PopularPosts />
+          </Suspense>
         </aside>
 
         <div className="lg:col-span-3">
